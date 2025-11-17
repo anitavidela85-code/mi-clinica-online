@@ -1,0 +1,113 @@
+.login-container {
+max-width: 400px;
+margin: 50px auto;
+padding: 30px;
+border-radius: 8px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+background-color: #fff;
+text-align: center;
+}
+
+.form-group {
+margin-bottom: 15px;
+text-align: left;
+}
+
+.form-group label {
+display: block;
+margin-bottom: 5px;
+font-weight: bold;
+}
+
+.form-group input {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+.login-container button[type="submit"] {
+width: 100%;
+padding: 10px;
+background-color: #007bff;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-size: 1em;
+transition: background-color 0.3s;
+}
+
+.login-container button[type="submit"]:hover {
+background-color: #0056b3;
+}
+
+/* Botones de Acceso Rápido (Favbutton) */
+.quick-access-buttons-container {
+position: fixed;
+bottom: 20px;
+right: 20px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+z-index: 1000;
+}
+
+.quick-access-button {
+width: 55px;
+height: 55px;
+border-radius: 50%;
+cursor: pointer;
+overflow: hidden;
+position: relative;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+transition: transform 0.2s, box-shadow 0.2s;
+border: 3px solid transparent;
+
+&:hover {
+transform: scale(1.1);
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.profile-img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.role-badge {
+position: absolute;
+bottom: -2px;
+right: -2px;
+padding: 2px 4px;
+font-size: 10px;
+color: white;
+font-weight: bold;
+border-radius: 50%;
+width: 18px;
+height: 18px;
+display: flex;
+align-items: center;
+justify-content: center;
+line-height: 1;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+
+&[title='Admin'] {
+border-color: #ffc107;
+.role-badge { background-color: #dc3545; }
+}
+&[title*='Especialista'] {
+border-color: #17a2b8;
+.role-badge { background-color: #17a2b8; }
+}
+&[title*='Paciente'] {
+border-color: #28a745;
+.role-badge { background-color: #28a745; }
+}
+}
+
+.mt-3 {
+margin-top: 1rem;
+}

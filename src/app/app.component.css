@@ -1,0 +1,49 @@
+:root {
+  --color-primary-utn: #1e88e5; 
+  --color-accent-admin: #dc3545; 
+  --color-accent-especialista: #17a2b8; 
+  --color-accent-paciente: #28a745; 
+  --color-background-light: #f8f9fa;
+  --color-text-dark: #343a40;
+}
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
+:host {
+  display: block;
+  min-height: 100vh; 
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Roboto', Arial, sans-serif; 
+  font-size: 16px; 
+  color: var(--color-text-dark);
+  background-color: var(--color-background-light); 
+}
+
+
+h1 {
+  color: var(--color-primary-utn);
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 2px solid rgba(30, 136, 229, 0.2); 
+  padding-bottom: 10px;
+}
+
+a {
+  color: var(--color-primary-utn);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: darken(var(--color-primary-utn), 10%);
+  text-decoration: underline;
+}
