@@ -1,0 +1,104 @@
+<div class="mis-turnos-container">
+   <h1>Mis Turnos ({{ userRole | titlecase }})</h1>
+ 
+  <div class="filter-section">
+    <input 
+      type="text" 
+        [(ngModel)]="filterQuery" 
+        (ngModelChange)="applyFilter()" 
+          placeholder="Filtrar por Especialidad, {{ filterPlaceholder }}, Estado o cualquier dato de la HC..."
+          >
+        <p class="filter-note">**NO UTILIZA Combobox** - Búsqueda avanzada por palabra clave (Sprint 3).</p>
+            </div>
+
+<div class="turnos-list">
+        <table>
+          <thead>
+        <tr>
+              <th>Fecha</th>
+              <th>Especialidad</th>
+              @if (userRole !== 'paciente') {
+                <th>Paciente</th>
+                 }
+              @if (userRole !== 'especialista') {
+                 <th>Especialista</th>
+               }
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+        </thead>
+          <tbody>
+           @for (turno of filteredTurnos; track turno.id) {
+             <tr [ngClass]="'status-' + turno.estado"
+                [appBorderStatus]="turno.estado"
+                appScaleOnHover>
+              <td>{{ turno.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ turno.especialidad }}</td>
+              @if (userRole !== 'paciente') {
+                 <td>{{ turno.pacienteNombre }}</td>
+               }
+             @if (userRole !== 'especialista') {
+               <td>{{ turno.especialistaNombre }}</td>
+              }
+              <td>{{ turno.estado | titlecase }}</td>
+              <td>
+              @if (turno.historiaClinica || turno.comentarioCancelacion || turno.comentarioRechazo || turno.resenaPaciente) {
+                 <button (click)="verResena(turno)" class="btn-secondary">
+                  Ver Reseña/Comentario
+                 </button>
+            }
+
+              @if (userRole === 'paciente') {
+                @if (turno.estado === 'pendiente' || turno.estado === 'aceptado') {
+                  <button (click)="cancelarTurno(turno.id, 'paciente')" class="btn-danger">
+                  Cancelar Turno
+                  </button>
+                }
+               @if (turno.estado === 'realizado') {
+                 <button (click)="openCalificar(turno)" [disabled]="turno.resenaPaciente" class="btn-success">
+                  {{ turno.resenaPaciente ? 'Atención Calificada' : 'Calificar Atención' }}
+                 </button>
+               }
+                @if (turno.estado === 'realizado' && turno.historiaClinica) {
+                   <button (click)="completarEncuesta(turno)" [disabled]="turno.encuestaCompletada" class="btn-info">
+                    Completar Encuesta
+                   </button>
+                  }
+                 }
+
+              @if (userRole === 'especialista') {
+                @if (turno.estado === 'pendiente') {
+                   <button (click)="cambiarEstado(turno.id, 'aceptado')" class="btn-success">
+                    Aceptar Turno
+                   </button>
+                   <button (click)="rechazarTurno(turno.id)" class="btn-danger">
+                    Rechazar Turno
+                  </button>
+                  <button (click)="cancelarTurno(turno.id, 'especialista')" class="btn-warning">
+                   Cancelar Turno
+                   </button>
+                   }
+                 @if (turno.estado === 'aceptado') {
+                   <button (click)="openFinalizar(turno)" class="btn-primary">
+                    Finalizar Turno
+                   </button>
+                  }
+                 }
+
+
+                @if (userRole === 'administrador') {
+                  @if (turno.estado === 'pendiente') {
+                   <button (click)="cancelarTurno(turno.id, 'administrador')" class="btn-danger">
+                    Cancelar Turno
+                   </button>
+                 }
+                }
+              </td>
+            </tr>
+          }
+             @empty {
+             <tr><td colspan="6">No hay turnos para mostrar.</td></tr>
+        } 
+      </tbody>
+     </table>
+</div>

@@ -1,0 +1,41 @@
+<div class="survey-container">
+  
+  <h1>{{ 'survey_title' | translate }}</h1> 
+  <p>{{ 'survey_description' | translate }}</p>
+
+  <form (ngSubmit)="submitSurvey()">
+    
+    <div class="form-group">
+      <label>{{ 'survey_comment_label' | translate }}:</label>
+      <textarea rows="4" [(ngModel)]="surveyData.comentario" name="comentario" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>{{ 'survey_quality_label' | translate }}: {{ surveyData.estrellas }}</label>
+      <div class="star-rating">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label>{{ 'survey_resolution_question' | translate }}</label>
+      <div class="radio-group">
+        <input type="radio" id="resuelto-si" [value]="true" [(ngModel)]="surveyData.resuelto" name="resuelto" required>
+        <label for="resuelto-si">{{ 'common_yes' | translate }}</label>
+        <input type="radio" id="resuelto-no" [value]="false" [(ngModelImpl)]="surveyData.resuelto" name="resuelto">
+        <label for="resuelto-no">{{ 'common_no' | translate }}</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input type="checkbox" id="recomienda" [(ngModel)]="surveyData.recomienda" name="recomienda">
+      <label for="recomienda">{{ 'survey_recommend_text' | translate }}</label>
+    </div>
+
+    <div class="form-group">
+      <label>{{ 'survey_wait_time_label' | translate }}: {{ surveyData.tiempoEspera }}</label>
+      <input type="range" min="0" max="10" [(ngModel)]="surveyData.tiempoEspera" name="tiempoEspera" required>
+    </div>
+
+    <button type="submit">{{ 'survey_submit_button' | translate }}</button>
+  </form>
+</div>

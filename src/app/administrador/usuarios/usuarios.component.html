@@ -1,0 +1,67 @@
+<div class="usuarios-container">
+    <h1>Gestión de Usuarios (Administrador)</h1>
+    
+    <div class="action-buttons-top">
+        <button (click)="exportUsers()" class="btn-export">
+            Descargar Usuarios (Excel)
+        </button>
+        <a [routerLink]="['/registro']">
+            <button class="btn-primary">Generar Nuevo Usuario (Incl. Admin)</button>
+        </a>
+    </div>
+
+    <div class="user-list">
+        <h2>Listado de Todos los Usuarios</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Aprobado/Verificado</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of usuariosList; track user.id) {
+                <tr [class.disabled]="!user.habilitado">
+                    <td>{{ user.nombre }} {{ user.apellido }}</td>
+                    
+                    <td [appHighlightRole]="user.role">{{ user.email }}</td> 
+                    
+                    <td>{{ user.role | rolDisplay }}</td>
+                    <td>
+                        @if (user.role === 'especialista') {
+                        <span>Aprobado: {{ user.is_approved ? 'Sí' : 'No' }}</span><br>
+                        }
+                        <span>Verificado: {{ user.email_confirmed_at ? 'Sí' : 'No' }}</span>
+                    </td>
+                    <td>
+                        <span [ngClass]="{'active': user.habilitado, 'inactive': !user.habilitado}">
+                            {{ user.habilitado ? 'Habilitado' : 'Inhabilitado' }}
+                        </span>
+                    </td>
+                    <td>
+                        @if (user.role === 'especialista') {
+                            <button 
+                                (click)="toggleHabilitacion(user.id)"
+                                [disabled]="!user.is_approved" 
+                                [class.btn-danger]="user.habilitado"
+                                [class.btn-success]="!user.habilitado">
+                                {{ user.habilitado ? 'Inhabilitar' : 'Habilitar/Aprobar' }}
+                            </button>
+                        } @else {
+                            <span>No aplica</span>
+                        }
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6">No hay usuarios registrados.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
