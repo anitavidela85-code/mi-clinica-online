@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TranslatePipe } from '../../pipes/translate.pipe';
+
 
 @Component({
   selector: 'app-encuesta-atencion',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="survey-container">
       <h1>Encuesta de Satisfacción </h1>

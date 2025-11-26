@@ -113,17 +113,23 @@ export class SolicitarTurnoComponent implements OnInit {
   
         if (this.usuariosService.getRole() === 'paciente') {
             this.selectedPacienteUid = this.usuariosService.getCurrentUser()?.uid || null;
- }
+        } else {
+            this.selectedPacienteUid = null;  
 
-          // Obtenemos las especialidades
+}
         const allEspecialidades = await this.usuariosService.getEspecialistas();
-        this.especialidades = [...new Set(allEspecialidades)];
+        const listaSoloNombres = allEspecialidades.map((item: any) => {
+  return typeof item === 'string' ? item : item.especialidad;
+});
+      this.filteredEspecialistas = this.allEspecialistas;
+
 
    } catch (error) {
        console.error('Error loading initial form data:', error);
         alert('Error al cargar datos iniciales. Verifique la conexión a Supabase.');
  }
   }
+  
  
   filterEspecialistas(): void {
    if (this.selectedEspecialidad) {

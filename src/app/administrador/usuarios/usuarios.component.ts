@@ -20,8 +20,7 @@ import { Usuario } from '../../modelos/usuario.interface';
 
 export class UsuariosComponent implements OnInit { 
   
-  
-  usuariosList: PerfilDB[] = []; 
+public usuariosList: any[] = []; 
 
   constructor(
     private usuariosService: UsuariosService,
@@ -53,6 +52,7 @@ export class UsuariosComponent implements OnInit {
   
   exportUsers(): void {
     
-    this.descargaService.downloadUsuariosExcel(this.usuariosList as any); 
+   this.descargaService.downloadUsuariosExcel(this.usuariosList, 'listado_usuarios');
+    
   }
 }

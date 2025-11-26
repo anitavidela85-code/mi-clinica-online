@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Usuario } from '../modelos/usuario.interface';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'; 
+import { Turno } from '../modelos/turno.interface'; 
 
 @Injectable({
   providedIn: 'root'
@@ -8,42 +12,54 @@ export class DescargaService {
 
   constructor() { }
 
-  downloadUsuariosExcel(usuarios: Usuario[]): void {
-    const data = usuarios.map(u => ({
-      Nombre: u.nombre,
-      Apellido: u.apellido,
-      Email: u.email,
-      Rol: u.role,
-      DNI: u.dni,
-      Habilitado: u.habilitado ? 'Sí' : 'No'
-    }));
-    
-    console.log('Datos de usuarios para Excel:', data);
-    alert(`Generando y descargando Excel para ${usuarios.length} usuarios.`);
+  downloadUsuariosExcel(data: any[], nombreArchivo: string) {
+  this.exportarExcel(data, nombreArchivo);
+}
+
+  //  EXCEL 
+  exportarExcel(data: any[], nombreArchivo: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.guardarArchivo(excelBuffer, nombreArchivo);
   }
 
-  downloadHistoriaClinicaPdf(paciente: Usuario): void {
-    if (!paciente.historiaClinica || paciente.historiaClinica.length === 0) {
-      alert('El paciente no tiene historia clínica para descargar.');
-      return;
-    }
-    
-    const informe = `
-        Clínica Online - Historia Clínica
-        Fecha de Emisión: ${new Date().toLocaleDateString()}
-        ---
-        Paciente: ${paciente.nombre} ${paciente.apellido} (DNI: ${paciente.dni})
-        
-        --- Historial de Atenciones (${paciente.historiaClinica.length}) ---
-        ${paciente.historiaClinica.map(hc => 
-            `Fecha: ${new Date(hc.fecha).toLocaleDateString()}
-            Reseña: ${hc.resenaEspecialista}
-            Altura: ${hc.altura}cm, Peso: ${hc.peso}kg, Temp: ${hc.temperatura}°C, Presión: ${hc.presion}
-            Datos Dinámicos: ${hc.datosDinamicos?.map(d => `${d.clave}: ${d.valor}`).join(', ') || 'N/A'}`
-        ).join('\n---\n')}
-    `;
-    
-    console.log('Contenido del PDF:', informe);
-    alert(`Generando y descargando PDF de Historia Clínica para ${paciente.nombre}.`);
+  private guardarArchivo(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + '.xlsx');
   }
+
+  // PDF HISTORIA CLINICA 
+  descargarHistoriaClinica(paciente: any, turnos: Turno[]) {
+    const doc = new jsPDF();
+    const logoUrl = 'assets/logo.png'; 
+
+    // Encabezado
+    // doc.addImage(logoUrl, 'PNG', 10, 10, 30, 30); // Descomentar si tienes logo
+    doc.setFontSize(18);
+    doc.text('Clínica Online - Historia Clínica', 50, 20);
+    doc.setFontSize(12);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 50, 30);
+    doc.text(`Paciente: ${paciente.nombre} ${paciente.apellido}`, 14, 50);
+
+    // Preparar datos para la tabla
+
+const bodyData = turnos.map((t: any) => [ 
+  t.fecha, 
+  t.especialidad, 
+  t.especialista?.apellido || 'Desconocido', 
+  t.historiaClinica?.diagnostico || '-',     
+]);
+    
+
+    autoTable(doc, {
+      startY: 60,
+      head: [['Fecha', 'Especialidad', 'Especialista', 'Diagnóstico']],
+      body: bodyData,
+    });
+
+    doc.save(`historia_clinica_${paciente.apellido}.pdf`);
+  }
+  
 }

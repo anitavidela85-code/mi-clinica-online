@@ -129,6 +129,37 @@ export class UsuariosService {
   return fullUser;
 }
 
+async getLogIngresosFromDB(): Promise<any[]> {
+  
+  return []; 
+  
+}
+
+async toggleHabilitarEspecialista(uid: string, estadoActual: boolean): Promise<void> {
+  
+  console.log(`Cambiando estado de ${uid} a ${!estadoActual}`);
+  
+}
+
+
+async getEspecialidades(): Promise<string[]> { 
+  const especialistas = await this.getEspecialistas();
+  const setEspecialidades = new Set<string>();
+
+  especialistas.forEach((esp: any) => {
+
+    if (Array.isArray(esp.especialidad)) {
+      esp.especialidad.forEach((e: string) => setEspecialidades.add(e));
+    } 
+  
+    else if (typeof esp.especialidad === 'string') {
+      setEspecialidades.add(esp.especialidad);
+    }
+  });
+
+  return Array.from(setEspecialidades); 
+
+}
 
     async login(email: string, password: string): Promise<{ success: boolean, message: string, user: Usuario | null }> {
         

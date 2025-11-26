@@ -23,17 +23,13 @@ const authGuard = () => true;
 const adminGuard = () => true;
 
 export const routes: Routes = [
-  
-  { path: 'bienvenida', component: BienvenidaComponent, data: { animation: 'BienvenidaPage' } },
-  { path: 'login', component: LoginComponent, data: { animation: 'LoginPage' } },
+
+  { path: 'bienvenida', component: BienvenidaComponent, data: { animation: 'fadeIn' } },
+  { path: 'login', component: LoginComponent, data: { animation: 'slideUp' } },
   { path: 'registro', component: RegistroComponent, data: { animation: 'RegistroPage' } },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] }, 
-
-  // Rutas Administrador
   { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard, adminGuard], data: { animation: 'UsuariosPage' } },
   { path: 'estadisticas', component: EstadisticasComponent, canActivate: [authGuard, adminGuard], data: { animation: 'EstadisticasPage' } },
- 
-  // Rutas Comunes (Paciente/Especialista)
   { path: 'mis-turnos', component: MisTurnosComponent, canActivate: [authGuard], data: { animation: 'TurnosPage' } },
   { path: 'solicitar-turno', component: SolicitarTurnoComponent, canActivate: [authGuard], data: { animation: 'SolicitarPage' } },
   { path: 'mi-perfil', component: MiPerfilComponent, canActivate: [authGuard], data: { animation: 'PerfilPage' } },

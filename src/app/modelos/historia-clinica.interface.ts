@@ -5,8 +5,10 @@ export interface HistoriaClinica {
   temperatura: number; 
   presion: string; 
   resenaEspecialista: string; 
+  diagnostico?: string; 
   datosDinamicos?: { clave: string, valor: string | number }[];
   rango0a100?: number;
   cuadroNumerico?: number;
   switchSiNo?: boolean;
+
 }
